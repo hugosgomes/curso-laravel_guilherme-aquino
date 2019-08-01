@@ -34,7 +34,15 @@ class DashboardController extends Controller
 
         try
         {
-            Auth::attempt($data, true);
+            if (env('PASSWORD_HASH'))
+            {
+                Auth::attempt($data, true);
+            }
+            else
+            {
+
+            }
+
             return redirect()->route('user.dashboard');
         }
         catch (Exception $e)
