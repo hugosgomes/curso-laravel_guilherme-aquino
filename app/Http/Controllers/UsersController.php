@@ -140,16 +140,13 @@ class UsersController extends Controller
      */
     public function destroy($id)
     {
-        $deleted = $this->repository->delete($id);
+        $request = $this->service->delete($id);
 
-        if (request()->wantsJson()) {
+        session()->flash('success', [
+            'success'   => $request['success'],
+            'messages'  => $request['messages']
+        ]);
 
-            return response()->json([
-                'message' => 'User deleted.',
-                'deleted' => $deleted,
-            ]);
-        }
-
-        return redirect()->back()->with('message', 'User deleted.');
+        return redirect()->route('user.index');
     }
 }

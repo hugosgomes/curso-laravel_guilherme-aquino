@@ -55,7 +55,32 @@ class UserService
 
     }
 
-    public function delete(){
+    public function delete($user_id){
+        try
+        {
 
+            $this->repository->delete($user_id);
+
+            return [
+                'success'   => true,
+                'messages'  => "Usuário Removido",
+                'data'      => null
+            ];
+        }
+        catch (Exception $e)
+        {
+            switch (get_class($e)) {
+                case ValidatorException::class  : return [
+                    'success'   => false,
+                    'messages'  => $e->getMessageBag()
+                ];
+                case QueryException::class      :
+                case Exception::class           :
+                default                         : return [
+                    'success'   => false,
+                    'messages'  => $e->getMessage()
+                ];
+            }
+        }
     }
 }
